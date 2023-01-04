@@ -14,7 +14,7 @@
             * options: [[1] bigquery, [1] oauth, Project id, dataset, Threads 1,Timeout 300 ,[1] US ]
     *   Git configurations
         * Create a git repo and initilize you folder
-    * 4 Login gcloud in venv
+    * Login gcloud in venv
         * gcloud auth application-default login
     * verify
         * dbt debug 
