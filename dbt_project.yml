@@ -26,7 +26,18 @@ clean-targets:
 # Configuring models
 models:
   northwind:
-    staging:
+    staging_model:
       +materialized: view
       +schema: staging
       +enabled: true
+    warehouse_model:
+      +materialized: table
+      +schema: warehouse
+      +enabled: true
+    analytics_obt_model:
+      +materialized: table
+      +schema: analytics_obt
+      +enabled: true
+
+
+
