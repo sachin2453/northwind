@@ -1,0 +1,16 @@
+version: 2
+
+models:
+    - name: stg_customers
+      columns:              
+          - name: id
+            tests: &not_null
+                - not_null
+    - name: stg_employee_privileges
+      columns:              
+          - name: privilege_id
+            tests: *not_null
+    - name: stg_employees
+      columns:              
+          - name: id
+            tests: *not_null

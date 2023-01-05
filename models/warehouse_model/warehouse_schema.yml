@@ -1,0 +1,32 @@
+version: 2
+
+models:
+    - name: dim_customers
+      columns:              
+          - name: customer_id
+            tests:
+                - not_null
+                - unique
+                - relationships:
+                    to: ref('stg_customers')
+                    field: id
+    - name: dim_product
+      columns:              
+          - name: product_id
+            tests:  &not_null_unique
+                - not_null
+                - unique
+    - name: dim_date
+      columns:              
+          - name: id
+            tests: *not_null_unique
+    - name: dim_employees
+      columns:
+          - name: job_title
+            tests:
+                - accepted_values:
+                      values:
+                          - Sales Manager
+                          - Sales Coordinator
+                          - Sales Representative
+                          - Vice President, Sales
