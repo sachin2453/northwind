@@ -11,6 +11,11 @@ models:
                 - relationships:
                     to: ref('stg_customers')
                     field: id
+      columns:              
+          - name: state_province
+            tests:
+                - state_check
+
     - name: dim_product
       description: Produt dimentional table with time stamp in Staging layer.
       columns:              

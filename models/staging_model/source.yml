@@ -9,6 +9,12 @@ sources:
     schema: dl_northwind
     tables: 
       - name: customer
+        description: Raw customers data.
+        columns:
+          - name: id
+            description: Primary key for customers.
+            tests:
+              - not_null
       - name: employee_privileges
       - name: employees
       - name: inventory_transaction_types
