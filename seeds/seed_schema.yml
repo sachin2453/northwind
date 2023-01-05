@@ -1,0 +1,8 @@
+version: 2 
+seeds:
+  - name: purchase_order_status
+    description: purchase_order status csv.
+    column:
+      - name: id
+        test: 
+          - not_null

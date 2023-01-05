@@ -2,6 +2,7 @@ version: 2
 
 models:
     - name: dim_customers
+      description: Customer dimentional table with time stamp in Staging layer.
       columns:              
           - name: customer_id
             tests:
@@ -11,16 +12,19 @@ models:
                     to: ref('stg_customers')
                     field: id
     - name: dim_product
+      description: Produt dimentional table with time stamp in Staging layer.
       columns:              
           - name: product_id
             tests:  &not_null_unique
                 - not_null
                 - unique
     - name: dim_date
+      description: "{{ doc('dim_date_docs') }}" 
       columns:              
           - name: id
             tests: *not_null_unique
     - name: dim_employees
+      description: Employee dimentional table with time stamp in Staging layer.
       columns:
           - name: job_title
             tests:

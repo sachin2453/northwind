@@ -1,3 +1,4 @@
+{{ config(materialized='ephemeral') }}
 with source as (
     select cast(supplier_ids as integer) as supplier_id,
            id,

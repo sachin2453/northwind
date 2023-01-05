@@ -1,6 +1,7 @@
+{{ config(materialized='view') }}
 with source as (
 
-    select * from {{ source('northwind', 'purchase_order_status') }}
+    select * from {{ ref('purchase_order_status') }}
 )
 select 
     *,
