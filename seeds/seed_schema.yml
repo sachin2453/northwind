@@ -1,8 +1,19 @@
 version: 2 
 seeds:
   - name: purchase_order_status
-    description: purchase_order status csv.
+    alias: order_status
+    description: purchase_order_status csv.
     column:
       - name: id
+        description: unique id of the purchase_order_status 
+        type: <int>
         test: 
           - not_null
+          - unique
+    column:
+      - name: status
+        description: status of the purchased order
+        type: <string>
+        test: 
+          - not_null
+          - unique       

@@ -1,0 +1,8 @@
+version: 2
+
+analyses:
+  - name: count_of_customers
+    description: analysis to count customers in data warehouse
+    columns:
+      - name: customer_count
+        description: Counts the customer_id in dim_customers
