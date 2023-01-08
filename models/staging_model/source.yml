@@ -1,12 +1,11 @@
 version: 2 
 sources:
   - name: northwind
+    schema: dl_northwind
     description: >
         Northwind is a microsoft provisioned dataset.
         With a ecommerce data
         \n
-        
-    schema: dl_northwind
     tables: 
       - name: customer
         description: Raw customers data.
