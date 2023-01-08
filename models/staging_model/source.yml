@@ -19,6 +19,10 @@ sources:
       - name: employees
       - name: inventory_transaction_types
       - name: inventory_transactions
+        loaded_at_field: transaction_created_date
+        freshness:
+          warn_after: {count: 7300, period: day}
+          error_after: {count: 7300, period: day}
       - name: invoices
       - name: order_details
       - name: order_details_status

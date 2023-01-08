@@ -1,0 +1,6 @@
+version: 2
+
+models:
+    - name: obt_customer_reporting
+    - name: obt_product_inventory
+    - name: obt_sales_overview

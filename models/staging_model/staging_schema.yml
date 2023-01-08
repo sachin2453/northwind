@@ -14,3 +14,8 @@ models:
       columns:              
           - name: id
             tests: *not_null
+
+    - name: stg_strings
+      tests:
+        - dbt_utils.expression_is_true:
+                expression: "string_id < 115"

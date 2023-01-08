@@ -14,8 +14,9 @@ models:
       columns:              
           - name: state_province
             tests:
-                - state_check
+                - not_null
 
+            
     - name: dim_product
       description: Produt dimentional table with time stamp in Staging layer.
       columns:              
@@ -28,9 +29,25 @@ models:
       columns:              
           - name: id
             tests: *not_null_unique
+  
     - name: dim_employees
-      description: Employee dimentional table with time stamp in Staging layer.
+      description: Employee dimentional table with timestamp in Staging layer.
       columns:
+          - name: employee_id
+            tests:
+              - dbt_expectations.expect_column_values_to_be_unique:
+                  row_condition: "employee_id is not null"
+              - dbt_expectations.expect_column_values_to_not_be_null:
+                  row_condition: "employee_id is not null"
+              - dbt_expectations.expect_column_values_to_be_between:
+                  min_value: 0  # (Optional)
+                  max_value: 10 # (Optional)
+              # - dbt_expectations.expect_column_values_to_be_of_type:
+              #     column_type: INT
+          - name: country_region
+            tests:
+              - dbt_expectations.expect_column_value_lengths_to_equal:
+                  value: 3
           - name: job_title
             tests:
                 - accepted_values:
@@ -39,3 +56,16 @@ models:
                           - Sales Coordinator
                           - Sales Representative
                           - Vice President, Sales
+                - dbt_expectations.expect_column_values_to_be_in_set:
+                    value_set: ['Sales Manager','Sales Coordinator','Sales Representative','Vice President, Sales']
+                - dbt_expectations.expect_column_values_to_not_be_in_set:
+                    value_set: ['Director of Portfolio']
+                - dbt_expectations.expect_column_value_lengths_to_be_between:
+                    min_value: 1 # (Optional)
+                    max_value: 25 # (Optional)
+                - dbt_expectations.expect_column_distinct_count_to_be_greater_than:
+                    value: 3
+                - dbt_expectations.expect_column_distinct_count_to_be_less_than:
+                    value: 10
+                - dbt_expectations.expect_column_distinct_values_to_be_in_set:
+                    value_set: ['Sales Manager','Sales Coordinator','Sales Representative','Vice President, Sales']
