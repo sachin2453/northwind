@@ -22,6 +22,7 @@ target-path: "target"
 clean-targets:
   - "target"
   - "dbt_packages"
+  - logs
 
 # Configuring models
 models:
@@ -35,6 +36,8 @@ models:
       +schema: warehouse
       +enabled: true
     analytics_obt_model:
+      +required_docs: true # dbt run-operation required_tests   
+      +required_tests: {"unique.*|not_null": 1} # # dbt run-operation required_tests  
       +materialized: table
       +schema: analytics_obt
       +enabled: true

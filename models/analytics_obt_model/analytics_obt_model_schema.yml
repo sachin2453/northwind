@@ -2,5 +2,16 @@ version: 2
 
 models:
     - name: obt_customer_reporting
+      description: final mart table
+      tests:
+          - not_null
+
+            
     - name: obt_product_inventory
+      description: final mart table
+      tests:
+          - not_null
     - name: obt_sales_overview
+      description: final mart table
+      tests:
+          - not_null

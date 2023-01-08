@@ -6,6 +6,11 @@ models:
           - name: id
             tests: &not_null
                 - not_null
+                - unique:
+                    config:
+                      severity: error
+                      error_if: ">100"
+                      warn_if: ">10"
     - name: stg_employee_privileges
       columns:              
           - name: privilege_id
