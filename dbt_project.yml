@@ -7,6 +7,7 @@ config-version: 2
 # dbt profile
 profile: 'northwind'
 
+
 # paths for each resourse
 model-paths: ["models"]
 analysis-paths: ["analyses"]

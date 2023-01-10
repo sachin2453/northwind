@@ -3,7 +3,7 @@
 {{
     config(
       target_database='dbtlabs-373301',
-      target_schema='stg_strings_snapshot',
+      target_schema='snapshot',
       unique_key='string_id',
 
       strategy='timestamp',
