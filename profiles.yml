@@ -1,0 +1,14 @@
+northwind:
+  target: prod
+  outputs:
+    prod:
+      dataset: dl_northwind
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      location: us-west1
+      method: oauth
+      priority: interactive
+      project: dbtlabs-373301
+      threads: 1
+      type: bigquery
+
