@@ -1,0 +1,222 @@
+version: 2
+
+models:
+
+# Row count Compare
+  - name: model_name
+    tests:
+      - dbt_utils.equal_rowcount: # compare row count of two tables
+          compare_model: ref('other_table_name') # Asserts that two relations have the same number of rows.
+
+  - name: model_name
+    tests:
+      - dbt_utils.fewer_rows_than: # compare row count of two tables
+          compare_model: ref('other_table_name') # Asserts that the respective model has fewer rows than the model being compared.
+
+# Column from 2 tables compare
+  - name: model_name
+    tests:
+      - dbt_utils.equality:
+          compare_model: ref('other_table_name') # Asserts the equality of two relations. Optionally specify a subset of columns to compare.
+          compare_columns: # columns from two tables
+            - first_column
+            - second_column
+
+# expression_is_true (To validate expression: length, Truth, algebric operations etc.. expression: "col_a + col_b = total")
+  - name: model_name
+    tests:
+      - dbt_utils.expression_is_true: # Table level tests 
+    - name: model_name
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "col_a + col_b = total"
+          config:
+            where: "created_at > '2018-12-31'"
+
+  - name: model_name # column level test
+    columns:
+      - name: col_a
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: '>= 1'
+      - name: col_b
+        tests:
+          - dbt_utils.expression_is_true: 
+              expression: '= 1'
+              config:
+                where: col_a = 1
+
+# recency
+  - name: model_name
+    tests:
+      - dbt_utils.recency: #v Asserts that a timestamp column in the reference model contains data that is at least as recent as the defined date interval.
+          datepart: day
+          field: created_at
+          interval: 1
+
+# at_least_one - Asserts that a column has at least one value.
+  - name: model_name
+    columns:
+      - name: col_name
+        tests:
+          - dbt_utils.at_least_one
+# not_constant
+  - name: model_name
+    columns:
+      - name: column_name
+        tests:
+          - dbt_utils.not_constant
+# not_empty_string - Asserts that a column does not have any values equal to ''.
+  - name: model_name
+    columns:
+      - name: column_name
+        tests:
+          - dbt_utils.not_empty_string
+    - name: model_name
+    columns:
+      - name: column_name
+        tests:
+          - dbt_utils.not_empty_string:
+              trim_whitespace: false # Trim white spaces is by default true
+# cardinality_equality : Asserts that values in a given column have exactly the same cardinality as values from a different column in a different model.
+  - name: model_name
+    columns:
+      - name: from_column
+        tests:
+          - dbt_utils.cardinality_equality:
+              field: other_column_name
+              to: ref('other_model_name')
+
+# not_null_proportion : Asserts that the proportion of non-null values present in a column is between a specified range [at_least, at_most] where at_most is an optional argument (default: 1.0).
+  - name: my_model
+    columns:
+      - name: id
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.95
+
+# not_accepted_values  (Opposite of the acceted_values default generic test)
+models:
+  - name: my_model
+    columns:
+      - name: city
+        tests:
+          - dbt_utils.not_accepted_values:
+              values: ['Barcelona', 'New York']
+
+# mutually_exclusive_ranges  
+  # test that age ranges do not overlap
+  - name: age_brackets
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: min_age
+          upper_bound_column: max_age
+          gaps: not_allowed
+
+  # test that each customer can only have one subscription at a time
+  - name: subscriptions
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: started_at
+          upper_bound_column: ended_at
+          partition_by: customer_id
+          gaps: required #default allowed , other option is not_allowed
+
+# test that each customer can have subscriptions that start and end on the same date
+  - name: subscriptions
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: started_at
+          upper_bound_column: ended_at
+          partition_by: customer_id
+          zero_length_range_allowed: true
+
+
+
+# sequential_values : This test confirms that a column contains sequential values. It can be used for both numeric values, and datetime values, as follows:
+seeds:
+  - name: util_even_numbers
+    columns:
+      - name: i
+        tests:
+          - dbt_utils.sequential_values:
+              interval: 2
+
+
+  - name: util_hours
+    columns:
+      - name: date_hour
+        tests:
+          - dbt_utils.sequential_values:
+              interval: 1
+              datepart: 'hour'
+
+
+# relationships_where 
+  - name: model_name
+    columns:
+      - name: id
+        tests:
+          - dbt_utils.relationships_where:
+              to: ref('other_model_name')
+              field: client_id
+              from_condition: id <> '4ca448b8-24bf-4b88-96c6-b1609499c38b'
+              to_condition: created_date >= '2020-01-01'
+
+# unique_combination_of_columns
+- name: revenue_by_product_by_month
+  tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - month
+          - product
+  tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - month
+          - group
+        quote_columns: true #use if column have quotes. By default :  false 
+
+# accepted_range 
+  - name: model_name
+    columns:
+      - name: user_id
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: false
+
+      - name: account_created_at
+        tests:
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
+              #inclusive is true by default
+
+      - name: num_returned_orders
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: "num_orders"
+
+      - name: num_web_sessions
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: false
+              where: "num_orders > 0"
+
+# group_by_columns 
+  - name: data_test_at_least_one
+    columns:
+      - name: field
+        tests:
+          - dbt_utils.at_least_one:
+              group_by_columns: ['customer_segment']
+      Only applies to:
+        # equal_rowcount()
+        # fewer_rows_than()
+        # recency()
+        # at_least_one()
+        # not_constant()
+        # sequential_values()
+        # non_null_proportion()
